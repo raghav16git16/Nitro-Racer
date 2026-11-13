@@ -1,0 +1,1372 @@
+<!-- ... existing code ... -->
+                    <!-- Mode Switcher Pill -->
+                    <div class="flex items-center gap-1.5 bg-slate-950/90 border border-white/15 rounded-xl p-1">
+                        <button id="mode-btn-levels" onclick="ui.setGameMode('levels')" class="btn-3d btn-3d-emerald px-2.5 py-1.5 rounded-lg font-display font-bold text-[10px] sm:text-xs transition cursor-pointer">
+                            🏁 100 LEVELS
+                        </button>
+                        <button id="mode-btn-free" onclick="ui.setGameMode('free')" class="btn-3d btn-3d-slate px-2.5 py-1.5 rounded-lg font-display font-bold text-[10px] sm:text-xs transition cursor-pointer">
+                            🌀 FREE CURVE
+                        </button>
+                        <button id="mode-btn-multi" onclick="ui.setGameMode('multi')" class="btn-3d btn-3d-slate px-2.5 py-1.5 rounded-lg font-display font-bold text-[10px] sm:text-xs transition cursor-pointer">
+                            🌐 MULTIPLAYER
+                        </button>
+                        <button id="btn-open-editor" onclick="ui.openEditor()" class="btn-3d btn-3d-purple px-2.5 py-1.5 rounded-lg font-display font-bold text-[10px] sm:text-xs text-white transition cursor-pointer">
+                            🎨 CUSTOMIZE
+                        </button>
+                    </div>
+                    <span id="garage-mode-badge" class="text-[11px] font-bold text-amber-300 tracking-wider uppercase">CAMPAIGN • 100 STAGES</span>
+                </div>
+
+                <!-- 100-Level Selector Bar (Shown in Levels Mode) -->
+                <div id="level-selector-bar" class="mb-2.5 p-2 rounded-xl bg-slate-900/90 border border-emerald-400/35 flex items-center justify-between gap-1.5">
+                    <div class="flex items-center gap-1">
+                        <button id="btn-prev-5" onclick="ui.changeLevel(-5)" title="Back 5 Levels" class="btn-3d btn-3d-slate px-2 py-1 rounded-lg font-display font-bold text-[10px] sm:text-xs transition cursor-pointer">◀◀</button>
+                        <button id="btn-prev-level" onclick="ui.changeLevel(-1)" class="btn-3d btn-3d-slate px-2.5 py-1 rounded-lg font-display font-bold text-xs transition cursor-pointer">◀</button>
+                    </div>
+                    <div class="text-center flex-1 min-w-0">
+                        <div class="flex items-center justify-center gap-2">
+                            <span id="level-title" class="font-display font-black text-xs sm:text-sm text-emerald-300 truncate">LEVEL 1/100 • NEON HARBOR</span>
+                            <span id="level-cleared-badge" class="hidden text-[9px] font-bold px-1.5 py-0.5 rounded bg-emerald-500/20 text-emerald-300 border border-emerald-400/40 shrink-0">CLEARED</span>
+                        </div>
+                        <div id="level-meta" class="text-[10px] sm:text-[11px] text-slate-300 truncate">Goal: 1.27 KM • Win Bonus: +$225 Free Cash</div>
+                    </div>
+                    <div class="flex items-center gap-1">
+                        <button id="btn-next-level" onclick="ui.changeLevel(1)" class="btn-3d btn-3d-slate px-2.5 py-1 rounded-lg font-display font-bold text-xs transition cursor-pointer">▶</button>
+                        <button id="btn-next-5" onclick="ui.changeLevel(5)" title="Forward 5 Levels" class="btn-3d btn-3d-slate px-2 py-1 rounded-lg font-display font-bold text-[10px] sm:text-xs transition cursor-pointer">▶▶</button>
+                    </div>
+                </div>
+
+                <!-- Free Mode Banner (Shown in Endless Curving Mode) -->
+                <div id="free-mode-bar" class="hidden mb-2.5 p-2.5 rounded-xl bg-gradient-to-r from-cyan-950/90 via-indigo-950/90 to-purple-950/90 border border-cyan-400/40 flex items-center justify-between gap-2">
+                    <div class="flex items-center gap-2.5">
+                        <span class="text-lg">🛣️</span>
+                        <div>
+                            <div class="font-display font-black text-xs sm:text-sm text-cyan-300">ENDLESS CURVING HIGHWAY</div>
+                            <div class="text-[10px] sm:text-[11px] text-slate-300">Infinite winding S-curves • No finish line • Survive & collect cash!</div>
+                        </div>
+                    </div>
+                    <div class="text-right shrink-0">
+                        <div class="text-[9px] font-bold uppercase tracking-wider text-amber-300/80">BEST RUN</div>
+                        <div id="free-best-dist" class="font-display font-black text-xs sm:text-sm text-amber-300">0.00 KM</div>
+                    </div>
+                </div>
+
+                <!-- Multiplayer Lobby Panel (Shown in Multiplayer Mode) -->
+                <div id="multiplayer-lobby-bar" class="hidden mb-2.5 p-2.5 rounded-xl bg-gradient-to-r from-indigo-950/95 via-slate-900/95 to-cyan-950/95 border border-cyan-400/45 flex flex-col gap-2">
+                    <div class="flex flex-wrap items-center justify-between gap-2">
+                        <div class="flex items-center gap-1.5">
+                            <span class="text-xs font-display font-bold text-cyan-300">DRIVER:</span>
+                            <input id="mp-player-name" type="text" maxlength="12" placeholder="Racer" onchange="multiplayer.updateName(this.value)" class="w-24 sm:w-28 px-2 py-1 rounded-lg bg-slate-950/90 border border-white/20 text-xs font-display font-bold text-white focus:outline-none focus:border-cyan-400">
+                        </div>
+                        <div id="mp-no-room-controls" class="flex items-center gap-1.5">
+                            <button onclick="multiplayer.createRoom()" class="btn-3d btn-3d-emerald px-2.5 py-1 rounded-lg font-display font-bold text-[10px] sm:text-xs cursor-pointer">
+                                + CREATE ROOM
+                            </button>
+                            <input id="mp-join-code" type="text" maxlength="4" placeholder="CODE" class="w-16 px-2 py-1 rounded-lg bg-slate-950/90 border border-cyan-400/40 text-center font-display font-black text-xs uppercase text-cyan-300 focus:outline-none">
+                            <button onclick="multiplayer.joinRoom()" class="btn-3d btn-3d-cyan px-2.5 py-1 rounded-lg font-display font-bold text-[10px] sm:text-xs cursor-pointer">
+                                JOIN
+                            </button>
+                        </div>
+                        <div id="mp-active-room-controls" class="hidden flex items-center gap-2">
+                            <div class="px-2.5 py-1 rounded-lg bg-slate-950 border border-amber-400/50 flex items-center gap-1.5">
+                                <span class="text-[10px] text-slate-400 font-bold">ROOM:</span>
+                                <span id="mp-room-code-display" class="font-display font-black text-xs sm:text-sm text-amber-300 tracking-widest">----</span>
+                                <button onclick="multiplayer.copyRoomCode()" title="Copy Room Code" class="text-[10px] px-1.5 py-0.5 rounded bg-white/10 hover:bg-white/20 text-cyan-300 font-bold cursor-pointer">COPY</button>
+                            </div>
+                            <button onclick="multiplayer.leaveRoom()" class="btn-3d btn-3d-slate px-2 py-1 rounded-lg font-display font-bold text-[10px] text-rose-300 cursor-pointer">LEAVE</button>
+                        </div>
+                    </div>
+                    <div class="flex items-center justify-between text-[10px] sm:text-[11px] bg-slate-950/60 px-2.5 py-1.5 rounded-lg border border-white/10">
+                        <span id="mp-status-text" class="text-slate-300">Create a room or enter a 4-letter friend code to race live!</span>
+                        <span id="mp-roster-badges" class="font-display font-bold text-cyan-300">0 RACERS</span>
+                    </div>
+                </div>
+
+                <!-- Car Cards Grid -->
+                <div id="car-cards-container" class="grid grid-cols-1 sm:grid-cols-2 gap-2.5 overflow-y-auto max-h-[29vh] pr-1">
+                    <!-- Populated dynamically via JS -->
+                </div>
+            </div>
+<!-- ... existing code ... -->
+                    <!-- Action CTA -->
+                    <button id="btn-main-cta" onclick="ui.handleMainCTA()" class="btn-3d btn-3d-cyan w-full py-3 sm:py-3.5 rounded-xl font-display font-black text-sm sm:text-base tracking-wider transition-all flex items-center justify-center gap-2 cursor-pointer">
+                        <span>🏁 RACE NOW</span>
+                    </button>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- ==================== 3D VEHICLE CUSTOMIZER / EDITOR OVERLAY ==================== -->
+    <div id="editor-overlay" class="hidden fixed inset-0 z-30 flex flex-col justify-between p-3 sm:p-6 pointer-events-none">
+        <!-- Top Header -->
+        <div class="flex items-center justify-between max-w-6xl mx-auto w-full pointer-events-auto">
+            <div class="glass-panel cyber-panel px-4 py-2 rounded-2xl flex items-center gap-3">
+                <span class="text-xl">🎨</span>
+                <div>
+                    <h2 class="font-display font-black text-sm sm:text-lg text-white tracking-wider">3D CUSTOM SHOP</h2>
+                    <p id="editor-vehicle-subtitle" class="text-[10px] sm:text-xs text-cyan-300 font-semibold">VIPER GT • FREE LIVERY & AERO STUDIO</p>
+                </div>
+            </div>
+            <button onclick="ui.closeEditor()" class="btn-3d btn-3d-emerald px-4 py-2.5 rounded-xl font-display font-black text-xs sm:text-sm tracking-wider cursor-pointer">
+                ✔ SAVE & GARAGE
+            </button>
+        </div>
+
+        <!-- Bottom Customizer Controls Deck -->
+        <div class="w-full max-w-5xl mx-auto glass-panel cyber-panel rounded-2xl p-3.5 sm:p-5 pointer-events-auto">
+            <div class="grid grid-cols-1 md:grid-cols-3 gap-4">
+                <!-- 1. Body Paint & Neon Underglow -->
+                <div class="space-y-2.5">
+                    <div>
+                        <div class="text-[10px] font-display font-bold uppercase tracking-wider text-slate-300 mb-1.5">BODY PAINT FINISH (FREE)</div>
+                        <div id="editor-body-swatches" class="flex flex-wrap gap-1.5"></div>
+                    </div>
+                    <div>
+                        <div class="text-[10px] font-display font-bold uppercase tracking-wider text-slate-300 mb-1.5">NEON TRIM & UNDERGLOW</div>
+                        <div id="editor-neon-swatches" class="flex flex-wrap gap-1.5"></div>
+                    </div>
+                </div>
+
+                <!-- 2. Hood/Tank Crest Emblem & Livery Stripes -->
+                <div class="space-y-2.5">
+                    <div>
+                        <div class="text-[10px] font-display font-bold uppercase tracking-wider text-slate-300 mb-1.5">CUSTOM EMBLEM TAG (3 CHARS)</div>
+                        <div class="flex items-center gap-2">
+                            <input id="editor-emblem-input" type="text" maxlength="3" placeholder="VGT" oninput="ui.updateCustomEmblem(this.value)" class="w-24 px-3 py-1.5 rounded-xl bg-slate-950/90 border border-cyan-400/50 font-display font-black text-sm uppercase text-center text-white focus:outline-none">
+                            <span class="text-[11px] text-slate-400">Appears on 3D hood & tank crest</span>
+                        </div>
+                    </div>
+                    <div>
+                        <div class="text-[10px] font-display font-bold uppercase tracking-wider text-slate-300 mb-1.5">RACING LIVERY PATTERN</div>
+                        <div class="grid grid-cols-3 gap-1.5">
+                            <button onclick="ui.setCustomLivery('twin')" id="livery-btn-twin" class="btn-3d btn-3d-slate py-1.5 rounded-lg font-display font-bold text-[10px] cursor-pointer">TWIN STRIPE</button>
+                            <button onclick="ui.setCustomLivery('center')" id="livery-btn-center" class="btn-3d btn-3d-slate py-1.5 rounded-lg font-display font-bold text-[10px] cursor-pointer">APEX CENTER</button>
+                            <button onclick="ui.setCustomLivery('clean')" id="livery-btn-clean" class="btn-3d btn-3d-slate py-1.5 rounded-lg font-display font-bold text-[10px] cursor-pointer">STEALTH</button>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- 3. Aero Wing / Spoiler Kit & Reset -->
+                <div class="space-y-2.5 flex flex-col justify-between">
+                    <div>
+                        <div class="text-[10px] font-display font-bold uppercase tracking-wider text-slate-300 mb-1.5">AERO SPOILER / TAIL KIT</div>
+                        <div class="grid grid-cols-3 gap-1.5">
+                            <button onclick="ui.setCustomSpoiler('gt')" id="spoiler-btn-gt" class="btn-3d btn-3d-slate py-1.5 rounded-lg font-display font-bold text-[10px] cursor-pointer">GT WING</button>
+                            <button onclick="ui.setCustomSpoiler('hyper')" id="spoiler-btn-hyper" class="btn-3d btn-3d-slate py-1.5 rounded-lg font-display font-bold text-[10px] cursor-pointer">DUAL HYPER</button>
+                            <button onclick="ui.setCustomSpoiler('none')" id="spoiler-btn-none" class="btn-3d btn-3d-slate py-1.5 rounded-lg font-display font-bold text-[10px] cursor-pointer">SLEEK</button>
+                        </div>
+                    </div>
+                    <div class="flex items-center justify-between pt-1">
+                        <span class="text-[10px] text-emerald-300 font-bold">✨ 100% Free Customization</span>
+                        <button onclick="ui.resetVehicleCustom()" class="px-2.5 py-1 rounded-lg bg-rose-500/20 hover:bg-rose-500/30 border border-rose-400/40 text-rose-200 font-display font-bold text-[10px] cursor-pointer">
+                            RESET STOCK
+                        </button>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- ==================== IN-GAME RACING HUD OVERLAY ==================== -->
+<!-- ... existing code ... -->
+                    <div id="hud-score" class="font-display font-black text-base sm:text-2xl text-white">0</div>
+                    <div id="hud-combo" class="text-[10px] sm:text-xs font-bold text-amber-300">1.0x COMBO</div>
+                </div>
+            </div>
+
+            <!-- Live Multiplayer Standings Strip (Shown Only During Multiplayer Race) -->
+            <div id="hud-mp-standings" class="hidden glass-panel cyber-panel px-3 py-1.5 rounded-xl border border-cyan-400/40 flex flex-wrap items-center justify-between gap-2 text-[10px] sm:text-xs font-display font-bold">
+                <span class="text-cyan-300">🌐 LIVE RACE ROOM <span id="hud-mp-code" class="text-amber-300">----</span></span>
+                <div id="hud-mp-racer-list" class="flex flex-wrap items-center gap-2 text-white"></div>
+            </div>
+        </div>
+
+        <!-- Center Event Callouts (Near Miss, Knockdown, Cash Pickup) -->
+<!-- ... existing code ... -->
+            <!-- Action Buttons (Restart / Return to Garage) -->
+            <div class="flex flex-col sm:flex-row gap-3 pt-2">
+                <button onclick="game.startRace()" class="btn-3d btn-3d-emerald flex-1 py-3 rounded-xl font-display font-black text-xs sm:text-sm tracking-wider transition cursor-pointer">
+                    🔄 RACE AGAIN
+                </button>
+                <button onclick="game.returnToGarage()" class="btn-3d btn-3d-cyan flex-1 py-3 rounded-xl font-display font-black text-xs sm:text-sm tracking-wider transition cursor-pointer">
+                    🏎️ GARAGE & UPGRADES
+                </button>
+            </div>
+        </div>
+    </div>
+
+    <!-- Firebase SDK for Real-Time Multiplayer Sync -->
+    <script type="module">
+        import { initializeApp } from "https://www.gstatic.com/firebasejs/11.6.1/firebase-app.js";
+        import { getAuth, signInAnonymously, signInWithCustomToken } from "https://www.gstatic.com/firebasejs/11.6.1/firebase-auth.js";
+        import { getFirestore, doc, setDoc, getDoc, updateDoc, deleteDoc, deleteField, onSnapshot, collection } from "https://www.gstatic.com/firebasejs/11.6.1/firebase-firestore.js";
+
+        window.fbModules = {
+            initializeApp, getAuth, signInAnonymously, signInWithCustomToken,
+            getFirestore, doc, setDoc, getDoc, updateDoc, deleteDoc, deleteField, onSnapshot, collection
+        };
+    </script>
+
+    <script>
+    /**
+     * ============================================================================
+     * NITRO RUSH 3D - COMPLETE ARCADE RACING ENGINE
+     * Pure Free-Cash Economy • Zero Microtransactions • Web Audio Synth + Three.js
+     * ============================================================================
+     */
+
+    // Safe global controller placeholders so inline onclick handlers never throw ReferenceError
+    window.ui = window.ui || {};
+    window.game = window.game || {};
+    window.multiplayer = window.multiplayer || {};
+    window.cycleAtmosphere = window.cycleAtmosphere || function() {};
+
+    // ----------------------------------------------------------------------------
+    // 1. GAME DATA & FREE ECONOMY CONFIGURATION
+    // ----------------------------------------------------------------------------
+    const CAR_MODELS = [
+<!-- ... existing code ... -->
+    // Persistent Free-Cash Save State
+    const saveState = {
+        cash: 600,
+        selectedCarId: 'viper',
+        unlockedCars: ['viper'],
+        gameMode: 'levels', // 'levels' | 'free' | 'multi'
+        currentLevel: 1,
+        highestUnlockedLevel: 1,
+        bestScore: 0,
+        bestFreeDistance: 0,
+        playerName: 'Racer' + Math.floor(100 + Math.random() * 899),
+        customizations: {
+            // [carId]: { primaryColor, neonColor, emblemText, livery, spoiler }
+        },
+        upgrades: {
+            viper: { speed: 1, accel: 1, handling: 1, nitro: 1 },
+            streetfighter: { speed: 1, accel: 1, handling: 1, nitro: 1 },
+            neon_apex: { speed: 1, accel: 1, handling: 1, nitro: 1 },
+            cyber_ninja: { speed: 1, accel: 1, handling: 1, nitro: 1 },
+            phantom_x: { speed: 1, accel: 1, handling: 1, nitro: 1 },
+            hyperion: { speed: 1, accel: 1, handling: 1, nitro: 1 },
+            valkyrie_gtr: { speed: 1, accel: 1, handling: 1, nitro: 1 }
+        }
+    };
+
+    const CUSTOM_PAINT_PALETTE = [
+        { name: 'Cyber Cyan', hex: 0x00e5ff, css: '#00e5ff' },
+        { name: 'Crimson Red', hex: 0xff1e38, css: '#ff1e38' },
+        { name: 'Hyper Pink', hex: 0xff007f, css: '#ff007f' },
+        { name: 'Emerald Venom', hex: 0x10b981, css: '#10b981' },
+        { name: 'Solar Gold', hex: 0xfacc15, css: '#facc15' },
+        { name: 'Ultra Violet', hex: 0xa855f7, css: '#a855f7' },
+        { name: 'Arctic White', hex: 0xf8fafc, css: '#f8fafc' },
+        { name: 'Stealth Carbon', hex: 0x1e293b, css: '#1e293b' },
+        { name: 'Blaze Orange', hex: 0xf97316, css: '#f97316' }
+    ];
+
+    const CUSTOM_NEON_PALETTE = [
+        { name: 'Electric Cyan', hex: 0x00ffff, css: '#00ffff' },
+        { name: 'Neon Magenta', hex: 0xff3399, css: '#ff3399' },
+        { name: 'Toxic Lime', hex: 0x00ff88, css: '#00ff88' },
+        { name: 'Amber Plasma', hex: 0xfde047, css: '#fde047' },
+        { name: 'Violet Pulse', hex: 0xd946ef, css: '#d946ef' },
+        { name: 'Ruby Laser', hex: 0xff4d6d, css: '#ff4d6d' }
+    ];
+
+    function getEffectiveCarSpec(carId) {
+        const base = CAR_MODELS.find(c => c.id === carId) || CAR_MODELS[0];
+        const custom = saveState.customizations[base.id] || {};
+        return {
+            ...base,
+            primaryColor: custom.primaryColor !== undefined ? custom.primaryColor : base.primaryColor,
+            neonColor: custom.neonColor !== undefined ? custom.neonColor : base.neonColor,
+            logoText: custom.emblemText || base.logoText,
+            livery: custom.livery || 'twin',
+            spoiler: custom.spoiler || 'gt'
+        };
+    }
+
+    function loadSave() {
+        try {
+            const raw = localStorage.getItem('nitro_rush_3d_save_v2');
+            if (raw) {
+                const parsed = JSON.parse(raw);
+                Object.assign(saveState, parsed);
+                if (!saveState.customizations) saveState.customizations = {};
+                if (!saveState.playerName) saveState.playerName = 'Racer' + Math.floor(100 + Math.random() * 899);
+                CAR_MODELS.forEach(c => {
+                    if (!saveState.upgrades[c.id]) {
+                        saveState.upgrades[c.id] = { speed: 1, accel: 1, handling: 1, nitro: 1 };
+                    }
+                });
+            }
+        } catch (e) { /* Ignore storage errors in sandboxed iframes */ }
+    }
+
+    function persistSave() {
+        try {
+            localStorage.setItem('nitro_rush_3d_save_v2', JSON.stringify(saveState));
+        } catch (e) { /* Ignore */ }
+    }
+
+    function getCarStats(carId) {
+        const base = getEffectiveCarSpec(carId);
+        const up = saveState.upgrades[base.id];
+        return {
+            car: base,
+            up,
+            topSpeedKmh: Math.round(base.baseSpeed + (up.speed - 1) * 18),
+            accelMult: base.baseAccel + (up.accel - 1) * 0.12,
+            handlingMult: base.baseHandling + (up.handling - 1) * 0.14,
+            nitroMult: base.baseNitro + (up.nitro - 1) * 0.15
+        };
+    }
+<!-- ... existing code ... -->
+        // Aerodynamic Fairing & Fuel Tank
+        const fairing = new THREE.Mesh(new THREE.BoxGeometry(0.68, 0.56, 1.75), bodyMat);
+        fairing.position.set(0, 0.45, -1.25);
+        fairing.rotation.x = 0.14;
+        pivotGroup.add(fairing);
+
+        // Optional Bike Tail Aero Wing
+        if (!isTraffic && bikeSpec.spoiler !== 'none') {
+            const wingW = bikeSpec.spoiler === 'hyper' ? 0.92 : 0.68;
+            const tailWing = new THREE.Mesh(new THREE.BoxGeometry(wingW, 0.06, 0.24), neonMat);
+            tailWing.position.set(0, 0.86, 0.68);
+            pivotGroup.add(tailWing);
+        }
+
+        // Tank Crest Emblem / Logo
+        if (!isTraffic) {
+            const logoTex = createVehicleLogoTexture(bikeSpec);
+            const logoMat = new THREE.MeshBasicMaterial({ map: logoTex, transparent: true });
+            const tankLogo = new THREE.Mesh(new THREE.PlaneGeometry(0.36, 0.36), logoMat);
+            tankLogo.rotation.x = -Math.PI / 2 + 0.14;
+            tankLogo.position.set(0, 0.745, -1.25);
+            pivotGroup.add(tankLogo);
+        }
+
+        // Front Nose Cowl & Windscreen
+<!-- ... existing code ... -->
+        // Racing Hood Emblem / Logo + Customizable Livery Stripes (Player Cars)
+        if (!isTraffic) {
+            const logoTex = createVehicleLogoTexture(carSpec);
+            const logoMat = new THREE.MeshBasicMaterial({ map: logoTex, transparent: true });
+            const hoodLogo = new THREE.Mesh(new THREE.PlaneGeometry(0.78, 0.78), logoMat);
+            hoodLogo.rotation.x = -Math.PI / 2 + 0.04;
+            hoodLogo.position.set(0, 0.41, -2.92);
+            pivotGroup.add(hoodLogo);
+
+            const livery = carSpec.livery || 'twin';
+            if (livery === 'twin') {
+                const stripeGeo = new THREE.PlaneGeometry(0.14, 1.25);
+                const stripeL = new THREE.Mesh(stripeGeo, neonMat);
+                stripeL.rotation.x = -Math.PI / 2;
+                stripeL.position.set(-0.52, 0.405, -2.92);
+                const stripeR = stripeL.clone();
+                stripeR.position.x = 0.52;
+                pivotGroup.add(stripeL, stripeR);
+            } else if (livery === 'center') {
+                const centerStripe = new THREE.Mesh(new THREE.PlaneGeometry(0.36, 1.3), neonMat);
+                centerStripe.rotation.x = -Math.PI / 2;
+                centerStripe.position.set(0, 0.404, -2.92);
+                pivotGroup.add(centerStripe);
+            }
+        }
+    };
+    window.ui = ui;
+        // Rear Spoiler Wing (Customizable Aero Kit)
+        const spoilerStyle = carSpec.spoiler || 'gt';
+        if (!isTraffic && spoilerStyle !== 'none') {
+            const wingWidth = spoilerStyle === 'hyper' ? 2.15 : 1.85;
+            const wing = new THREE.Mesh(new THREE.BoxGeometry(wingWidth, 0.08, 0.34), bodyMat);
+            wing.position.set(0, spoilerStyle === 'hyper' ? 0.88 : 0.78, -0.32);
+            pivotGroup.add(wing);
+
+            if (spoilerStyle === 'hyper') {
+                const upperWing = new THREE.Mesh(new THREE.BoxGeometry(wingWidth * 0.9, 0.06, 0.24), neonMat);
+                upperWing.position.set(0, 1.04, -0.26);
+                pivotGroup.add(upperWing);
+            }
+
+            const strutGeo = new THREE.BoxGeometry(0.08, 0.38, 0.2);
+            const strutL = new THREE.Mesh(strutGeo, accentMat);
+            strutL.position.set(-0.68, 0.62, -0.35);
+            const strutR = strutL.clone();
+            strutR.position.x = 0.68;
+            pivotGroup.add(strutL, strutR);
+        } else if (isTraffic) {
+            const wing = new THREE.Mesh(new THREE.BoxGeometry(1.85, 0.08, 0.34), bodyMat);
+            wing.position.set(0, 0.78, -0.32);
+            pivotGroup.add(wing);
+        }
+
+        // Neon Underglow Strip
+        const glowGeo = new THREE.PlaneGeometry(2.1, 4.3);
+        const glowMat = new THREE.MeshBasicMaterial({
+            color: carSpec.neonColor,
+            transparent: true,
+            opacity: isTraffic ? 0.22 : 0.48,
+            side: THREE.DoubleSide
+        });
+        const underglow = new THREE.Mesh(glowGeo, glowMat);
+        underglow.rotation.x = -Math.PI / 2;
+        underglow.position.set(0, -0.18, -2.0);
+        pivotGroup.add(underglow);
+
+        // Racing Hood Emblem / Logo + Customizable Livery Stripes (Player Cars)
+        if (!isTraffic) {
+            const logoTex = createVehicleLogoTexture(carSpec);
+            const logoMat = new THREE.MeshBasicMaterial({ map: logoTex, transparent: true });
+            const hoodLogo = new THREE.Mesh(new THREE.PlaneGeometry(0.78, 0.78), logoMat);
+            hoodLogo.rotation.x = -Math.PI / 2 + 0.04;
+            hoodLogo.position.set(0, 0.41, -2.92);
+            pivotGroup.add(hoodLogo);
+
+            const livery = carSpec.livery || 'twin';
+            if (livery === 'twin') {
+                const stripeGeo = new THREE.PlaneGeometry(0.14, 1.25);
+                const stripeL = new THREE.Mesh(stripeGeo, neonMat);
+                stripeL.rotation.x = -Math.PI / 2;
+                stripeL.position.set(-0.52, 0.405, -2.92);
+                const stripeR = stripeL.clone();
+                stripeR.position.x = 0.52;
+                pivotGroup.add(stripeL, stripeR);
+            } else if (livery === 'center') {
+                const centerStripe = new THREE.Mesh(new THREE.PlaneGeometry(0.36, 1.3), neonMat);
+                centerStripe.rotation.x = -Math.PI / 2;
+                centerStripe.position.set(0, 0.404, -2.92);
+                pivotGroup.add(centerStripe);
+            }
+        }
+
+        // Rear Spoiler Wing (Customizable Aero Kit)
+        const spoilerStyle = carSpec.spoiler || 'gt';
+        if (!isTraffic && spoilerStyle !== 'none') {
+            const wingWidth = spoilerStyle === 'hyper' ? 2.15 : 1.85;
+            const wing = new THREE.Mesh(new THREE.BoxGeometry(wingWidth, 0.08, 0.34), bodyMat);
+            wing.position.set(0, spoilerStyle === 'hyper' ? 0.88 : 0.78, -0.32);
+            pivotGroup.add(wing);
+
+            if (spoilerStyle === 'hyper') {
+                const upperWing = new THREE.Mesh(new THREE.BoxGeometry(wingWidth * 0.9, 0.06, 0.24), neonMat);
+                upperWing.position.set(0, 1.04, -0.26);
+                pivotGroup.add(upperWing);
+            }
+
+            const strutGeo = new THREE.BoxGeometry(0.08, 0.38, 0.2);
+            const strutL = new THREE.Mesh(strutGeo, accentMat);
+            strutL.position.set(-0.68, 0.62, -0.35);
+            const strutR = strutL.clone();
+            strutR.position.x = 0.68;
+            pivotGroup.add(strutL, strutR);
+        } else if (isTraffic) {
+            const wing = new THREE.Mesh(new THREE.BoxGeometry(1.85, 0.08, 0.34), bodyMat);
+            wing.position.set(0, 0.78, -0.32);
+            pivotGroup.add(wing);
+        }
+
+        // Neon Underglow Strip
+        const glowGeo = new THREE.PlaneGeometry(2.1, 4.3);
+        const glowMat = new THREE.MeshBasicMaterial({
+            color: carSpec.neonColor,
+            transparent: true,
+            opacity: isTraffic ? 0.22 : 0.48,
+            side: THREE.DoubleSide
+        });
+        const underglow = new THREE.Mesh(glowGeo, glowMat);
+        underglow.rotation.x = -Math.PI / 2;
+        underglow.position.set(0, -0.18, -2.0);
+        pivotGroup.add(underglow);
+
+        return group;
+    }
+
+    function setPlayerCarMesh(carId) {
+        if (playerCarMesh) {
+            carPreviewGroup.remove(playerCarMesh);
+        }
+        const spec = getEffectiveCarSpec(carId);
+        if (spec.type === 'bike') {
+            playerCarMesh = createMotorbikeMesh(spec, false);
+        } else {
+            playerCarMesh = createHypercarMesh(spec, false);
+        }
+        playerCarMesh.position.set(0, 0.42, 0);
+        carPreviewGroup.add(playerCarMesh);
+    }
+
+    function createFloatingNameTag(nameText, colorHex = '#22d3ee') {
+        const c = document.createElement('canvas');
+        c.width = 256;
+        c.height = 64;
+        const ctx = c.getContext('2d');
+        ctx.fillStyle = 'rgba(7, 11, 25, 0.85)';
+        ctx.beginPath();
+        ctx.roundRect(12, 8, 232, 48, 16);
+        ctx.fill();
+        ctx.lineWidth = 4;
+        ctx.strokeStyle = colorHex;
+        ctx.stroke();
+
+        ctx.fillStyle = '#ffffff';
+        ctx.font = '900 26px Orbitron, sans-serif';
+        ctx.textAlign = 'center';
+        ctx.textBaseline = 'middle';
+        ctx.fillText(nameText.toUpperCase(), 128, 33);
+
+        const tex = new THREE.CanvasTexture(c);
+        const mat = new THREE.SpriteMaterial({ map: tex, transparent: true });
+        const sprite = new THREE.Sprite(mat);
+        sprite.scale.set(3.2, 0.8, 1);
+        return sprite;
+    }
+
+    // ----------------------------------------------------------------------------
+    // 4B. REAL-TIME MULTIPLAYER ROOM CONTROLLER (FIREBASE FIRESTORE SYNC)
+    // ----------------------------------------------------------------------------
+    const multiplayer = {
+        db: null,
+        auth: null,
+        userId: null,
+        roomCode: null,
+        isHost: false,
+        roomData: null,
+        unsubRoom: null,
+        rivals: {}, // [uid]: { mesh, targetX, targetZ, data }
+        lastSyncTime: 0,
+        raceDistance: 3600, // 3.6 KM Multiplayer Sprint
+
+        async ensureReady() {
+            if (this.db && this.userId) return true;
+            if (!window.fbModules || typeof __firebase_config === 'undefined') {
+                return false;
+            }
+            try {
+                const { initializeApp, getAuth, signInAnonymously, signInWithCustomToken, getFirestore } = window.fbModules;
+                const firebaseConfig = JSON.parse(__firebase_config);
+                const app = initializeApp(firebaseConfig, 'NitroRushMP');
+                this.auth = getAuth(app);
+                this.db = getFirestore(app);
+                if (typeof __initial_auth_token !== 'undefined' && __initial_auth_token) {
+                    await signInWithCustomToken(this.auth, __initial_auth_token);
+                } else {
+                    await signInAnonymously(this.auth);
+                }
+                this.userId = this.auth.currentUser?.uid || ('racer_' + Math.random().toString(36).slice(2, 9));
+                return true;
+            } catch (err) {
+                console.warn('Multiplayer init fallback:', err);
+                return false;
+            }
+        },
+
+        getAppId() {
+            return typeof __app_id !== 'undefined' ? __app_id : 'default-app-id';
+        },
+
+        getRoomDocRef(code) {
+            const { doc } = window.fbModules;
+            return doc(this.db, 'artifacts', this.getAppId(), 'public', 'data', 'nitro_rooms', code);
+        },
+
+        updateName(val) {
+            const cleaned = (val || '').trim().slice(0, 12);
+            if (cleaned) {
+                saveState.playerName = cleaned;
+                persistSave();
+            }
+        },
+
+        async createRoom() {
+            const ok = await this.ensureReady();
+            if (!ok) {
+                ui.showToast('MULTIPLAYER REQUIRES CLOUD CONNECTION', 'text-rose-300');
+                return;
+            }
+            const chars = 'ABCDEFGHJKLMNPQRSTUVWXYZ23456789';
+            let code = '';
+            for (let i = 0; i < 4; i++) code += chars[Math.floor(Math.random() * chars.length)];
+
+            const spec = getEffectiveCarSpec(saveState.selectedCarId);
+            const roomPayload = {
+                code,
+                hostId: this.userId,
+                status: 'LOBBY',
+                startedAt: 0,
+                raceDistance: this.raceDistance,
+                players: {
+                    [this.userId]: {
+                        uid: this.userId,
+                        name: saveState.playerName,
+                        carId: spec.id,
+                        primaryColor: spec.primaryColor,
+                        neonColor: spec.neonColor,
+                        logoText: spec.logoText,
+                        livery: spec.livery,
+                        spoiler: spec.spoiler,
+                        x: 0,
+                        dist: 0,
+                        kmh: 30,
+                        finished: false,
+                        finishTime: 0,
+                        updatedAt: Date.now()
+                    }
+                }
+            };
+
+            const { setDoc } = window.fbModules;
+            await setDoc(this.getRoomDocRef(code), roomPayload);
+            this.roomCode = code;
+            this.isHost = true;
+            this.subscribeRoom(code);
+            ui.showToast(`ROOM ${code} CREATED! SHARE CODE WITH FRIENDS`, 'text-emerald-300');
+        },
+
+        async joinRoom() {
+            const inputEl = document.getElementById('mp-join-code');
+            const code = (inputEl?.value || '').trim().toUpperCase();
+            if (code.length < 4) {
+                ui.showToast('ENTER A 4-CHARACTER ROOM CODE', 'text-amber-300');
+                return;
+            }
+            const ok = await this.ensureReady();
+            if (!ok) {
+                ui.showToast('MULTIPLAYER REQUIRES CLOUD CONNECTION', 'text-rose-300');
+                return;
+            }
+            const { getDoc, updateDoc } = window.fbModules;
+            const docRef = this.getRoomDocRef(code);
+            const snap = await getDoc(docRef);
+            if (!snap.exists()) {
+                ui.showToast(`ROOM ${code} NOT FOUND`, 'text-rose-300');
+                return;
+            }
+            const spec = getEffectiveCarSpec(saveState.selectedCarId);
+            await updateDoc(docRef, {
+                [`players.${this.userId}`]: {
+                    uid: this.userId,
+                    name: saveState.playerName,
+                    carId: spec.id,
+                    primaryColor: spec.primaryColor,
+                    neonColor: spec.neonColor,
+                    logoText: spec.logoText,
+                    livery: spec.livery,
+                    spoiler: spec.spoiler,
+                    x: 0,
+                    dist: 0,
+                    kmh: 30,
+                    finished: false,
+                    finishTime: 0,
+                    updatedAt: Date.now()
+                }
+            });
+
+            this.roomCode = code;
+            this.isHost = (snap.data().hostId === this.userId);
+            this.subscribeRoom(code);
+            ui.showToast(`JOINED ROOM ${code}!`, 'text-cyan-300');
+        },
+
+        subscribeRoom(code) {
+            if (this.unsubRoom) this.unsubRoom();
+            const { onSnapshot } = window.fbModules;
+            this.unsubRoom = onSnapshot(this.getRoomDocRef(code), (snap) => {
+                if (!snap.exists()) {
+                    this.leaveRoom(true);
+                    return;
+                }
+                const data = snap.data();
+                this.roomData = data;
+                this.isHost = (data.hostId === this.userId);
+                ui.renderMultiplayerLobby();
+
+                // Auto-start race for all joined friends when host triggers RACING
+                if (data.status === 'RACING' && game.state === 'GARAGE' && saveState.gameMode === 'multi') {
+                    game.startRace(true);
+                }
+            }, (err) => {
+                console.warn('Room listener error:', err);
+            });
+        },
+
+        async triggerRoomRaceStart() {
+            if (!this.roomCode || !this.db) return;
+            const { updateDoc } = window.fbModules;
+            const players = this.roomData?.players || {};
+            const resetUpdates = {
+                status: 'RACING',
+                startedAt: Date.now()
+            };
+            Object.keys(players).forEach(uid => {
+                resetUpdates[`players.${uid}.dist`] = 0;
+                resetUpdates[`players.${uid}.x`] = 0;
+                resetUpdates[`players.${uid}.finished`] = false;
+                resetUpdates[`players.${uid}.finishTime`] = 0;
+            });
+            await updateDoc(this.getRoomDocRef(this.roomCode), resetUpdates);
+        },
+
+        async resetRoomToLobby() {
+            if (!this.roomCode || !this.db || !this.isHost) return;
+            const { updateDoc } = window.fbModules;
+            await updateDoc(this.getRoomDocRef(this.roomCode), { status: 'LOBBY' });
+        },
+
+        async syncPlayerTelemetry(x, dist, kmh, finished = false, finishTime = 0) {
+            if (!this.roomCode || !this.db || !this.userId) return;
+            const now = Date.now();
+            if (!finished && now - this.lastSyncTime < 140) return; // ~7Hz smooth sync
+            this.lastSyncTime = now;
+
+            try {
+                const { updateDoc } = window.fbModules;
+                const spec = getEffectiveCarSpec(saveState.selectedCarId);
+                await updateDoc(this.getRoomDocRef(this.roomCode), {
+                    [`players.${this.userId}.x`]: Number(x.toFixed(2)),
+                    [`players.${this.userId}.dist`]: Number(dist.toFixed(1)),
+                    [`players.${this.userId}.kmh`]: Math.round(kmh),
+                    [`players.${this.userId}.carId`]: spec.id,
+                    [`players.${this.userId}.primaryColor`]: spec.primaryColor,
+                    [`players.${this.userId}.neonColor`]: spec.neonColor,
+                    [`players.${this.userId}.finished`]: finished,
+                    [`players.${this.userId}.finishTime`]: finishTime,
+                    [`players.${this.userId}.updatedAt`]: now
+                });
+            } catch (e) { /* Ignore transient network hiccups */ }
+        },
+
+        clearRivalMeshes() {
+            Object.values(this.rivals).forEach(r => {
+                if (r.mesh) scene.remove(r.mesh);
+            });
+            this.rivals = {};
+        },
+
+        updateRivalsInScene(playerDist, dt) {
+            if (saveState.gameMode !== 'multi' || !this.roomData?.players) return;
+            const players = this.roomData.players;
+            const activeIds = new Set();
+
+            Object.values(players).forEach(p => {
+                if (!p || p.uid === this.userId) return;
+                activeIds.add(p.uid);
+
+                let rival = this.rivals[p.uid];
+                if (!rival) {
+                    const baseSpec = CAR_MODELS.find(c => c.id === p.carId) || CAR_MODELS[0];
+                    const customSpec = {
+                        ...baseSpec,
+                        primaryColor: p.primaryColor ?? baseSpec.primaryColor,
+                        neonColor: p.neonColor ?? baseSpec.neonColor,
+                        logoText: p.logoText || baseSpec.logoText,
+                        livery: p.livery || 'twin',
+                        spoiler: p.spoiler || 'gt'
+                    };
+                    const mesh = customSpec.type === 'bike'
+                        ? createMotorbikeMesh(customSpec, false)
+                        : createHypercarMesh(customSpec, false);
+                    const tag = createFloatingNameTag(p.name || 'RIVAL', '#' + (customSpec.neonColor || 0x00ffff).toString(16).padStart(6, '0'));
+                    tag.position.set(0, 2.35, -1.5);
+                    mesh.add(tag);
+                    scene.add(mesh);
+                    rival = { mesh, currentX: p.x || 0, currentRelZ: 0 };
+                    this.rivals[p.uid] = rival;
+                }
+
+                // Relative Z: rival ahead of player has negative Z
+                const targetRelZ = -(p.dist - playerDist);
+                rival.currentX += ((p.x || 0) - rival.currentX) * Math.min(1, dt * 10);
+                rival.currentRelZ += (targetRelZ - rival.currentRelZ) * Math.min(1, dt * 10);
+
+                rival.mesh.position.set(rival.currentX, 0.42, rival.currentRelZ);
+                rival.mesh.visible = Math.abs(rival.currentRelZ) < 260;
+            });
+
+            // Remove disconnected rivals
+            Object.keys(this.rivals).forEach(uid => {
+                if (!activeIds.has(uid)) {
+                    scene.remove(this.rivals[uid].mesh);
+                    delete this.rivals[uid];
+                }
+            });
+
+            // Update Live Standings Strip
+            const sorted = Object.values(players).sort((a, b) => (b.dist || 0) - (a.dist || 0));
+            const listEl = document.getElementById('hud-mp-racer-list');
+            if (listEl) {
+                listEl.innerHTML = sorted.map((r, idx) => {
+                    const isMe = r.uid === this.userId;
+                    const km = ((r.dist || 0) / 1000).toFixed(2);
+                    return `<span class="px-2 py-0.5 rounded ${isMe ? 'bg-cyan-500/25 border border-cyan-400 text-cyan-200' : 'bg-white/10 text-slate-200'}">#${idx + 1} ${r.name} (${km}km${r.finished ? ' 🏁' : ''})</span>`;
+                }).join('');
+            }
+        },
+
+        async leaveRoom(silent = false) {
+            if (this.unsubRoom) {
+                this.unsubRoom();
+                this.unsubRoom = null;
+            }
+            if (this.roomCode && this.db && this.userId) {
+                try {
+                    const { updateDoc, deleteField } = window.fbModules;
+                    await updateDoc(this.getRoomDocRef(this.roomCode), {
+                        [`players.${this.userId}`]: deleteField()
+                    });
+                } catch (e) { /* Ignore */ }
+            }
+            this.roomCode = null;
+            this.roomData = null;
+            this.isHost = false;
+            this.clearRivalMeshes();
+            ui.renderMultiplayerLobby();
+            if (!silent) ui.showToast('LEFT MULTIPLAYER ROOM', 'text-slate-300');
+        }
+    };
+<!-- ... existing code ... -->
+            this.state = 'RACING';
+            this.playerX = 0;
+            this.playerVx = 0;
+            this.speed = 35 / 3.6; // Starts cleanly above the 30 KM/H minimum floor
+            this.nitro = 45; // Starts at 45% so player must earn >60% for Wheelie!
+            this.isNitroActive = false;
+            this.isWheelieActive = false;
+            this.wheelieAngle = 0;
+            this.wheelieCashBuffer = 0;
+            this.isDrifting = false;
+            this.distance = 0;
+            this.raceTime = 0;
+            this.runCash = 0;
+            this.score = 0;
+            this.combo = 1.0;
+            this.comboTimer = 0;
+            this.nearMissCount = 0;
+            this.knockdownCount = 0;
+            this.lastSpawnDist = 20;
+            this.levelCompleted = false;
+            this.finishLineMesh = null;
+            this.curveAmount = 0;
+            this.curveTarget = 0;
+
+            const isLevelsMode = (saveState.gameMode === 'levels');
+            const isMultiMode = (saveState.gameMode === 'multi');
+            const lvl = this.getActiveLevel();
+            this.levelTargetDist = isLevelsMode ? lvl.distance : (isMultiMode ? multiplayer.raceDistance : Infinity);
+            if (isLevelsMode) {
+                applyTheme(lvl.theme);
+            }
+
+            // Reset entities & multiplayer rivals
+            trafficList.forEach(t => scene.remove(t.mesh));
+            trafficList.length = 0;
+            pickupList.forEach(p => scene.remove(p.mesh));
+            pickupList.length = 0;
+            particleList.forEach(pt => scene.remove(pt.mesh));
+            particleList.length = 0;
+            multiplayer.clearRivalMeshes();
+
+            if (isMultiMode && multiplayer.roomCode && arguments[0] !== true) {
+                multiplayer.triggerRoomRaceStart();
+            }
+
+            // Spawn 3D Checkered Finish Line Banner in Levels Mode or Multiplayer Mode
+            if (isLevelsMode || isMultiMode) {
+                this.finishLineMesh = createFinishLineMesh();
+                this.finishLineMesh.position.set(0, 0, -this.levelTargetDist);
+                scene.add(this.finishLineMesh);
+            }
+
+            // Switch UI overlays
+            document.getElementById('garage-overlay').classList.add('hidden');
+            document.getElementById('gameover-overlay').classList.add('hidden');
+            document.getElementById('editor-overlay').classList.add('hidden');
+            document.getElementById('hud-overlay').classList.remove('hidden');
+
+            const mpHud = document.getElementById('hud-mp-standings');
+            if (isMultiMode && multiplayer.roomCode) {
+                mpHud.classList.remove('hidden');
+                document.getElementById('hud-mp-code').textContent = multiplayer.roomCode;
+            } else {
+                mpHud.classList.add('hidden');
+            }
+
+            if (isLevelsMode) {
+                document.getElementById('hud-level-badge').textContent = `LVL ${lvl.num}/${MAX_LEVELS}`;
+                document.getElementById('hud-level-badge').className = 'font-display font-black text-[11px] sm:text-xs text-emerald-300 whitespace-nowrap';
+                document.getElementById('hud-progress-fill').style.width = '0%';
+                document.getElementById('hud-level-dist-text').textContent = `0.00 / ${(lvl.distance / 1000).toFixed(2)} KM`;
+            } else if (isMultiMode) {
+                document.getElementById('hud-level-badge').textContent = `🌐 MULTI SPRINT`;
+                document.getElementById('hud-level-badge').className = 'font-display font-black text-[11px] sm:text-xs text-amber-300 whitespace-nowrap';
+                document.getElementById('hud-progress-fill').style.width = '0%';
+                document.getElementById('hud-level-dist-text').textContent = `0.00 / ${(multiplayer.raceDistance / 1000).toFixed(2)} KM`;
+            } else {
+                document.getElementById('hud-level-badge').textContent = `🌀 FREE CURVE`;
+                document.getElementById('hud-level-badge').className = 'font-display font-black text-[11px] sm:text-xs text-cyan-300 whitespace-nowrap';
+                document.getElementById('hud-progress-fill').style.width = '100%';
+                document.getElementById('hud-level-dist-text').textContent = `ENDLESS`;
+            }
+<!-- ... existing code ... -->
+        completeLevel() {
+            if (this.state !== 'RACING') return;
+            this.state = 'GAMEOVER';
+            this.levelCompleted = true;
+            audio.updateEngine(0, false, false);
+            audio.playLevelWin();
+
+            const isMulti = (saveState.gameMode === 'multi');
+            const lvl = this.getActiveLevel();
+            let mpRank = 1;
+            if (isMulti && multiplayer.roomData?.players) {
+                const sorted = Object.values(multiplayer.roomData.players).sort((a, b) => (b.dist || 0) - (a.dist || 0));
+                mpRank = Math.max(1, sorted.findIndex(p => p.uid === multiplayer.userId) + 1);
+                multiplayer.syncPlayerTelemetry(this.playerX, this.distance, this.speed * 3.6, true, this.raceTime);
+                if (multiplayer.isHost) multiplayer.resetRoomToLobby();
+            }
+
+            const stageBonus = isMulti ? Math.max(250, 900 - (mpRank - 1) * 200) : lvl.reward;
+            this.runCash += stageBonus;
+            saveState.cash += this.runCash;
+
+            if (!isMulti && lvl.num >= saveState.highestUnlockedLevel && lvl.num < MAX_LEVELS) {
+                saveState.highestUnlockedLevel = lvl.num + 1;
+                saveState.currentLevel = lvl.num + 1;
+            }
+            if (this.score > saveState.bestScore) {
+                saveState.bestScore = Math.floor(this.score);
+            }
+            persistSave();
+
+            const titleEl = document.getElementById('gameover-title');
+            titleEl.textContent = isMulti
+                ? `🏁 P${mpRank} FINISH • ROOM ${multiplayer.roomCode}!`
+                : `🏆 LEVEL ${lvl.num} COMPLETE!`;
+            titleEl.className = 'font-display font-black text-2xl sm:text-4xl text-emerald-300 tracking-wide';
+            document.getElementById('gameover-subtitle').textContent = isMulti
+                ? `Finished in ${(this.raceTime).toFixed(1)}s • +$${stageBonus} Podium Bonus!`
+                : `${lvl.name} Cleared • +$${stageBonus} Stage Bonus!`;
+
+            document.getElementById('go-cash').textContent = `+$${this.runCash.toLocaleString()}`;
+            document.getElementById('go-dist').textContent = `${(this.distance / 1000).toFixed(2)} KM`;
+            document.getElementById('go-nearmiss').textContent = this.nearMissCount;
+            document.getElementById('go-knockdowns').textContent = this.knockdownCount;
+            document.getElementById('go-score').textContent = Math.floor(this.score).toLocaleString();
+
+            document.getElementById('hud-overlay').classList.add('hidden');
+            document.getElementById('gameover-overlay').classList.remove('hidden');
+        },
+<!-- ... existing code ... -->
+            // 5. DISTANCE PROGRESSION & LEVEL FINISH LINE CHECK
+            const dz = this.speed * dt;
+            this.distance += dz;
+            this.raceTime += dt;
+            this.score += dz * 1.5 * this.combo * (this.isWheelieActive ? 1.5 : 1.0);
+
+            if (saveState.gameMode === 'levels' || saveState.gameMode === 'multi') {
+                if (this.finishLineMesh) {
+                    this.finishLineMesh.position.z += dz;
+                }
+                const pct = Math.min(100, (this.distance / this.levelTargetDist) * 100);
+                document.getElementById('hud-progress-fill').style.width = `${pct.toFixed(1)}%`;
+                document.getElementById('hud-level-dist-text').textContent = `${(this.distance / 1000).toFixed(2)} / ${(this.levelTargetDist / 1000).toFixed(2)} KM`;
+
+                if (saveState.gameMode === 'multi') {
+                    multiplayer.syncPlayerTelemetry(this.playerX, this.distance, this.speed * 3.6, false, 0);
+                    multiplayer.updateRivalsInScene(this.distance, dt);
+                }
+
+                if (this.distance >= this.levelTargetDist) {
+                    this.completeLevel();
+                    return;
+                }
+            } else {
+                // Free Mode: Live distance & curving highway intensity indicator
+                const curveDir = Math.abs(this.curveAmount) < 0.0005 ? 'STRAIGHT' : (this.curveAmount > 0 ? 'CURVE ▶' : '◀ CURVE');
+                document.getElementById('hud-level-dist-text').textContent = `${(this.distance / 1000).toFixed(2)} KM • ${curveDir}`;
+            }
+<!-- ... existing code ... -->
+        setGameMode(mode) {
+            saveState.gameMode = mode;
+            persistSave();
+            this.renderGarage();
+        },
+
+        openEditor() {
+            const spec = getEffectiveCarSpec(saveState.selectedCarId);
+            document.getElementById('garage-overlay').classList.add('hidden');
+            document.getElementById('editor-overlay').classList.remove('hidden');
+            document.getElementById('editor-vehicle-subtitle').textContent = `${spec.name} • FREE LIVERY & AERO STUDIO`;
+            document.getElementById('editor-emblem-input').value = spec.logoText || '';
+            this.renderEditorSwatches();
+        },
+
+        closeEditor() {
+            document.getElementById('editor-overlay').classList.add('hidden');
+            document.getElementById('garage-overlay').classList.remove('hidden');
+            this.renderGarage();
+        },
+
+        getOrCreateCustomRecord(carId) {
+            if (!saveState.customizations[carId]) {
+                saveState.customizations[carId] = {};
+            }
+            return saveState.customizations[carId];
+        },
+
+        setCustomPaint(hex) {
+            const rec = this.getOrCreateCustomRecord(saveState.selectedCarId);
+            rec.primaryColor = hex;
+            persistSave();
+            setPlayerCarMesh(saveState.selectedCarId);
+            this.renderEditorSwatches();
+        },
+
+        setCustomNeon(hex) {
+            const rec = this.getOrCreateCustomRecord(saveState.selectedCarId);
+            rec.neonColor = hex;
+            persistSave();
+            setPlayerCarMesh(saveState.selectedCarId);
+            this.renderEditorSwatches();
+        },
+
+        updateCustomEmblem(text) {
+            const cleaned = (text || '').replace(/[^a-zA-Z0-9]/g, '').toUpperCase().slice(0, 3);
+            const rec = this.getOrCreateCustomRecord(saveState.selectedCarId);
+            rec.emblemText = cleaned || undefined;
+            persistSave();
+            setPlayerCarMesh(saveState.selectedCarId);
+        },
+
+        setCustomLivery(livery) {
+            const rec = this.getOrCreateCustomRecord(saveState.selectedCarId);
+            rec.livery = livery;
+            persistSave();
+            setPlayerCarMesh(saveState.selectedCarId);
+            this.renderEditorSwatches();
+        },
+
+        setCustomSpoiler(spoiler) {
+            const rec = this.getOrCreateCustomRecord(saveState.selectedCarId);
+            rec.spoiler = spoiler;
+            persistSave();
+            setPlayerCarMesh(saveState.selectedCarId);
+            this.renderEditorSwatches();
+        },
+
+        resetVehicleCustom() {
+            delete saveState.customizations[saveState.selectedCarId];
+            persistSave();
+            const spec = getEffectiveCarSpec(saveState.selectedCarId);
+            document.getElementById('editor-emblem-input').value = spec.logoText;
+            setPlayerCarMesh(saveState.selectedCarId);
+            this.renderEditorSwatches();
+            this.showToast('RESTORED FACTORY STOCK SPEC', 'text-cyan-300');
+        },
+
+        renderEditorSwatches() {
+            const spec = getEffectiveCarSpec(saveState.selectedCarId);
+            const bodyWrap = document.getElementById('editor-body-swatches');
+            const neonWrap = document.getElementById('editor-neon-swatches');
+            if (!bodyWrap || !neonWrap) return;
+
+            bodyWrap.innerHTML = CUSTOM_PAINT_PALETTE.map(p => {
+                const active = spec.primaryColor === p.hex;
+                return `<button onclick="ui.setCustomPaint(${p.hex})" title="${p.name}" style="background:${p.css}" class="w-7 h-7 rounded-full border-2 ${active ? 'border-white scale-110 ring-2 ring-cyan-400' : 'border-white/30 opacity-85 hover:opacity-100'} transition cursor-pointer"></button>`;
+            }).join('');
+
+            neonWrap.innerHTML = CUSTOM_NEON_PALETTE.map(p => {
+                const active = spec.neonColor === p.hex;
+                return `<button onclick="ui.setCustomNeon(${p.hex})" title="${p.name}" style="background:${p.css}" class="w-7 h-7 rounded-full border-2 ${active ? 'border-white scale-110 ring-2 ring-amber-300' : 'border-white/30 opacity-85 hover:opacity-100'} transition cursor-pointer"></button>`;
+            }).join('');
+
+            ['twin', 'center', 'clean'].forEach(mode => {
+                const btn = document.getElementById(`livery-btn-${mode}`);
+                if (btn) btn.className = `btn-3d ${spec.livery === mode ? 'btn-3d-cyan' : 'btn-3d-slate'} py-1.5 rounded-lg font-display font-bold text-[10px] cursor-pointer`;
+            });
+            ['gt', 'hyper', 'none'].forEach(style => {
+                const btn = document.getElementById(`spoiler-btn-${style}`);
+                if (btn) btn.className = `btn-3d ${spec.spoiler === style ? 'btn-3d-cyan' : 'btn-3d-slate'} py-1.5 rounded-lg font-display font-bold text-[10px] cursor-pointer`;
+            });
+        },
+
+        renderMultiplayerLobby() {
+            const nameInput = document.getElementById('mp-player-name');
+            if (nameInput && document.activeElement !== nameInput) {
+                nameInput.value = saveState.playerName;
+            }
+            const noRoom = document.getElementById('mp-no-room-controls');
+            const activeRoom = document.getElementById('mp-active-room-controls');
+            const statusEl = document.getElementById('mp-status-text');
+            const rosterEl = document.getElementById('mp-roster-badges');
+
+            if (multiplayer.roomCode && multiplayer.roomData) {
+                noRoom.classList.add('hidden');
+                activeRoom.classList.remove('hidden');
+                document.getElementById('mp-room-code-display').textContent = multiplayer.roomCode;
+                const players = Object.values(multiplayer.roomData.players || {});
+                rosterEl.textContent = `${players.length} RACER${players.length === 1 ? '' : 'S'}`;
+                const names = players.map(p => `${p.name}${p.uid === multiplayer.roomData.hostId ? ' 👑' : ''}`).join(' • ');
+                statusEl.textContent = multiplayer.isHost
+                    ? `Host Ready • Racers: ${names}`
+                    : `Waiting for Host to press RACE NOW • Racers: ${names}`;
+            } else {
+                noRoom.classList.remove('hidden');
+                activeRoom.classList.add('hidden');
+                rosterEl.textContent = '0 RACERS';
+                statusEl.textContent = 'Create a room or enter a 4-character friend code to race live!';
+            }
+        },
+
+        changeLevel(delta) {
+            const next = Math.max(1, Math.min(saveState.highestUnlockedLevel, saveState.currentLevel + delta));
+            saveState.currentLevel = next;
+            persistSave();
+            this.renderGarage();
+        },
+
+        renderGarage() {
+            document.getElementById('garage-cash').textContent = `$${saveState.cash.toLocaleString()}`;
+
+            // Update Mode Switcher UI
+            const isLevelsMode = (saveState.gameMode === 'levels');
+            const isFreeMode = (saveState.gameMode === 'free');
+            const isMultiMode = (saveState.gameMode === 'multi');
+
+            const btnLevels = document.getElementById('mode-btn-levels');
+            const btnFree = document.getElementById('mode-btn-free');
+            const btnMulti = document.getElementById('mode-btn-multi');
+            const levelBar = document.getElementById('level-selector-bar');
+            const freeBar = document.getElementById('free-mode-bar');
+            const multiBar = document.getElementById('multiplayer-lobby-bar');
+            const modeBadge = document.getElementById('garage-mode-badge');
+
+            btnLevels.className = `btn-3d ${isLevelsMode ? 'btn-3d-emerald' : 'btn-3d-slate'} px-2.5 py-1.5 rounded-lg font-display font-bold text-[10px] sm:text-xs transition cursor-pointer`;
+            btnFree.className = `btn-3d ${isFreeMode ? 'btn-3d-cyan' : 'btn-3d-slate'} px-2.5 py-1.5 rounded-lg font-display font-bold text-[10px] sm:text-xs transition cursor-pointer`;
+            btnMulti.className = `btn-3d ${isMultiMode ? 'btn-3d-amber' : 'btn-3d-slate'} px-2.5 py-1.5 rounded-lg font-display font-bold text-[10px] sm:text-xs transition cursor-pointer`;
+
+            levelBar.classList.toggle('hidden', !isLevelsMode);
+            freeBar.classList.toggle('hidden', !isFreeMode);
+            multiBar.classList.toggle('hidden', !isMultiMode);
+
+            if (isLevelsMode) {
+                modeBadge.textContent = `CAMPAIGN • 100 STAGES`;
+                modeBadge.className = 'text-[11px] font-bold text-amber-300 tracking-wider uppercase';
+            } else if (isFreeMode) {
+                modeBadge.textContent = `ENDLESS CURVING HIGHWAY`;
+                modeBadge.className = 'text-[11px] font-bold text-cyan-300 tracking-wider uppercase';
+                document.getElementById('free-best-dist').textContent = `${(saveState.bestFreeDistance / 1000).toFixed(2)} KM`;
+            } else {
+                modeBadge.textContent = `LIVE MULTIPLAYER SPRINT`;
+                modeBadge.className = 'text-[11px] font-bold text-amber-300 tracking-wider uppercase';
+                this.renderMultiplayerLobby();
+            }
+
+            // Update Level Selector Bar
+            const lvl = game.getActiveLevel();
+            document.getElementById('level-title').textContent = `LEVEL ${lvl.num}/${MAX_LEVELS} • ${lvl.name}`;
+            document.getElementById('level-meta').textContent = `Goal: ${(lvl.distance / 1000).toFixed(2)} KM • Win Bonus: +$${lvl.reward} Free Cash`;
+            const clearedBadge = document.getElementById('level-cleared-badge');
+            if (lvl.num < saveState.highestUnlockedLevel) {
+                clearedBadge.classList.remove('hidden');
+            } else {
+                clearedBadge.classList.add('hidden');
+            }
+            document.getElementById('btn-prev-level').disabled = lvl.num <= 1;
+            document.getElementById('btn-prev-5').disabled = lvl.num <= 1;
+            document.getElementById('btn-next-level').disabled = lvl.num >= saveState.highestUnlockedLevel;
+            document.getElementById('btn-next-5').disabled = lvl.num >= saveState.highestUnlockedLevel;
+
+            const container = document.getElementById('car-cards-container');
+            container.innerHTML = '';
+
+            CAR_MODELS.forEach(car => {
+                const effCar = getEffectiveCarSpec(car.id);
+                const isUnlocked = saveState.unlockedCars.includes(car.id);
+                const isSelected = saveState.selectedCarId === car.id;
+                const hexColor = '#' + effCar.primaryColor.toString(16).padStart(6, '0');
+                const typeBadge = car.type === 'bike' ? '🏍️' : '🏎️';
+
+                const card = document.createElement('div');
+                card.className = `p-3 rounded-xl border transition cursor-pointer flex flex-col justify-between ${
+                    isSelected
+                        ? 'bg-cyan-500/20 border-cyan-400 shadow-lg shadow-cyan-500/15'
+                        : 'bg-slate-900/75 border-white/10 hover:border-white/30'
+                }`;
+                card.onclick = () => {
+                    saveState.selectedCarId = car.id;
+                    persistSave();
+                    setPlayerCarMesh(car.id);
+                    this.renderGarage();
+                };
+
+                card.innerHTML = `
+                    <div class="flex items-center justify-between gap-2">
+                        <div class="flex items-center gap-2">
+                            <span class="w-3.5 h-3.5 rounded-full inline-block border border-white/40" style="background:${hexColor}"></span>
+                            <span class="font-display font-bold text-xs sm:text-sm text-white">${typeBadge} ${car.name}</span>
+                        </div>
+                        <span class="text-[10px] font-bold px-2 py-0.5 rounded-full ${
+                            isUnlocked ? 'bg-emerald-500/20 text-emerald-300' : 'bg-amber-500/20 text-amber-300'
+                        }">
+                            ${isUnlocked ? (isSelected ? 'EQUIPPED' : 'OWNED') : `$${car.price.toLocaleString()}`}
+                        </span>
+                    </div>
+                    <div class="text-[11px] text-slate-300 mt-1.5 flex items-center justify-between">
+                        <span>${car.classTag}</span>
+                        <span class="text-cyan-300/90">${car.perk}</span>
+                    </div>
+                `;
+                container.appendChild(card);
+            });
+
+            // Selected Car Stats & Upgrades
+            const stats = getCarStats(saveState.selectedCarId);
+            const isUnlocked = saveState.unlockedCars.includes(stats.car.id);
+            document.getElementById('selected-car-name').textContent = stats.car.name;
+            document.getElementById('selected-car-class').textContent = `${stats.car.classTag} • ${stats.car.perk}`;
+
+            // Stat bars
+            document.getElementById('stat-speed-val').textContent = `${stats.topSpeedKmh} KM/H`;
+            document.getElementById('stat-speed-bar').style.width = `${Math.min(100, (stats.topSpeedKmh / 480) * 100)}%`;
+
+            const accelPct = Math.min(100, Math.round((stats.accelMult / 2.2) * 100));
+            document.getElementById('stat-accel-val').textContent = `${accelPct}%`;
+            document.getElementById('stat-accel-bar').style.width = `${accelPct}%`;
+
+            const handPct = Math.min(100, Math.round((stats.handlingMult / 2.2) * 100));
+            document.getElementById('stat-handling-val').textContent = `${handPct}%`;
+            document.getElementById('stat-handling-bar').style.width = `${handPct}%`;
+
+            const nitroPct = Math.min(100, Math.round((stats.nitroMult / 2.3) * 100));
+            document.getElementById('stat-nitro-val').textContent = `${nitroPct}%`;
+            document.getElementById('stat-nitro-bar').style.width = `${nitroPct}%`;
+
+            // Upgrade buttons
+            const upContainer = document.getElementById('upgrade-buttons-container');
+            upContainer.innerHTML = '';
+            const upgradeDefs = [
+                { key: 'speed', label: 'TOP SPEED', icon: '⚡' },
+                { key: 'accel', label: 'ENGINE', icon: '🔥' },
+                { key: 'handling', label: 'DRIFT TIRES', icon: '🛞' },
+                { key: 'nitro', label: 'NITRO TANK', icon: '🚀' }
+            ];
+
+            upgradeDefs.forEach(u => {
+                const curLvl = stats.up[u.key];
+                const isMax = curLvl >= 5;
+                const cost = curLvl * 350;
+                const canAfford = isUnlocked && !isMax && saveState.cash >= cost;
+
+                const btn = document.createElement('button');
+                btn.disabled = !canAfford;
+                btn.className = `p-2 rounded-xl border text-left transition flex items-center justify-between ${
+                    !isUnlocked
+                        ? 'bg-slate-900/40 border-white/5 opacity-45 cursor-not-allowed'
+                        : isMax
+                            ? 'bg-emerald-500/15 border-emerald-400/30 cursor-default'
+                            : canAfford
+                                ? 'bg-slate-800/90 hover:bg-slate-700/90 border-cyan-400/40 cursor-pointer active:scale-95'
+                                : 'bg-slate-900/60 border-white/10 opacity-60 cursor-not-allowed'
+                }`;
+                btn.onclick = () => this.buyUpgrade(u.key, cost);
+
+                btn.innerHTML = `
+                    <div>
+                        <div class="text-[10px] font-bold text-slate-300">${u.icon} ${u.label}</div>
+                        <div class="text-[11px] font-display font-bold text-cyan-300">LVL ${curLvl}/5</div>
+                    </div>
+                    <span class="text-xs font-display font-bold ${isMax ? 'text-emerald-300' : 'text-amber-300'}">
+                        ${isMax ? 'MAX' : `$${cost}`}
+                    </span>
+                `;
+                upContainer.appendChild(btn);
+            });
+
+            // Main CTA button
+            const ctaBtn = document.getElementById('btn-main-cta');
+            if (isUnlocked) {
+                ctaBtn.disabled = false;
+                if (isMultiMode) {
+                    if (!multiplayer.roomCode) {
+                        ctaBtn.className = 'btn-3d btn-3d-amber w-full py-3 sm:py-3.5 rounded-xl font-display font-black text-sm sm:text-base tracking-wider transition-all flex items-center justify-center gap-2 cursor-pointer';
+                        ctaBtn.innerHTML = `<span>🌐 CREATE / JOIN ROOM FIRST</span>`;
+                    } else if (multiplayer.isHost) {
+                        ctaBtn.className = 'btn-3d btn-3d-emerald w-full py-3 sm:py-3.5 rounded-xl font-display font-black text-sm sm:text-base tracking-wider transition-all flex items-center justify-center gap-2 cursor-pointer';
+                        ctaBtn.innerHTML = `<span>🏁 START ROOM ${multiplayer.roomCode} RACE</span>`;
+                    } else {
+                        ctaBtn.className = 'btn-3d btn-3d-cyan w-full py-3 sm:py-3.5 rounded-xl font-display font-black text-sm sm:text-base tracking-wider transition-all flex items-center justify-center gap-2 cursor-pointer';
+                        ctaBtn.innerHTML = `<span>⚡ READY IN ROOM ${multiplayer.roomCode}</span>`;
+                    }
+                } else {
+                    ctaBtn.className = 'btn-3d btn-3d-cyan w-full py-3 sm:py-3.5 rounded-xl font-display font-black text-sm sm:text-base tracking-wider transition-all flex items-center justify-center gap-2 cursor-pointer';
+                    ctaBtn.innerHTML = isLevelsMode
+                        ? `<span>🏁 RACE LEVEL ${lvl.num}</span>`
+                        : `<span>🌀 RACE FREE CURVE</span>`;
+                }
+            } else {
+                const canBuy = saveState.cash >= stats.car.price;
+                ctaBtn.disabled = !canBuy;
+                ctaBtn.className = canBuy
+                    ? 'btn-3d btn-3d-amber w-full py-3 sm:py-3.5 rounded-xl font-display font-black text-sm sm:text-base tracking-wider transition-all flex items-center justify-center gap-2 cursor-pointer'
+                    : 'btn-3d btn-3d-slate opacity-60 cursor-not-allowed w-full py-3 sm:py-3.5 rounded-xl font-display font-black text-sm sm:text-base tracking-wider flex items-center justify-center gap-2';
+                ctaBtn.innerHTML = canBuy
+                    ? `<span>🔓 UNLOCK ${stats.car.name} ($${stats.car.price.toLocaleString()})</span>`
+                    : `<span>🔒 NEED $${stats.car.price.toLocaleString()} FREE CASH</span>`;
+            }
+        },
+<!-- ... existing code ... -->
+        handleMainCTA() {
+            const stats = getCarStats(saveState.selectedCarId);
+            const isUnlocked = saveState.unlockedCars.includes(stats.car.id);
+            if (isUnlocked) {
+                if (saveState.gameMode === 'multi') {
+                    if (!multiplayer.roomCode) {
+                        multiplayer.createRoom();
+                        return;
+                    }
+                    if (!multiplayer.isHost) {
+                        this.showToast('WAITING FOR ROOM HOST TO LAUNCH RACE!', 'text-cyan-300');
+                        return;
+                    }
+                }
+                game.startRace();
+            } else if (saveState.cash >= stats.car.price) {
+                saveState.cash -= stats.car.price;
+                saveState.unlockedCars.push(stats.car.id);
+                persistSave();
+                audio.playCoin();
+                this.showToast(`UNLOCKED ${stats.car.name}!`, 'text-amber-300');
+                this.renderGarage();
+            }
+        },
+
+        buyUpgrade(key, cost) {
+            const up = saveState.upgrades[saveState.selectedCarId];
+            if (!up || up[key] >= 5 || saveState.cash < cost) return;
+            saveState.cash -= cost;
+            up[key] += 1;
+            persistSave();
+            audio.playCoin();
+            this.showToast(`UPGRADED ${key.toUpperCase()} TO LVL ${up[key]}!`, 'text-emerald-300');
+            this.renderGarage();
+        },
+
+        showToast(text, colorClass = 'text-cyan-300') {
+            const container = document.getElementById('callout-container');
+            if (!container) return;
+            const toast = document.createElement('div');
+            toast.className = `callout-pop px-4 py-1.5 rounded-full bg-slate-950/90 border border-white/20 font-display font-black text-xs sm:text-sm tracking-wider shadow-xl ${colorClass}`;
+            toast.textContent = text;
+            container.appendChild(toast);
+            setTimeout(() => {
+                if (toast.parentNode) toast.parentNode.removeChild(toast);
+            }, 1350);
+        }
+    };
+
+    // Expose all controllers globally for inline HTML event handlers
+    window.ui = ui;
+    window.game = game;
+    window.multiplayer = multiplayer;
+    window.cycleAtmosphere = cycleAtmosphere;

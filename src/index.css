@@ -1,0 +1,142 @@
+@import "tailwindcss";
+
+@layer base {
+  html,
+  body,
+  #root {
+    width: 100%;
+    height: 100%;
+    margin: 0;
+    padding: 0;
+    overflow: hidden;
+    font-family: 'Plus Jakarta Sans', system-ui, -apple-system, sans-serif;
+    background-color: #050814;
+    color: #f8fafc;
+    touch-action: none;
+  }
+}
+
+.font-display {
+  font-family: 'Orbitron', system-ui, sans-serif;
+}
+
+.font-mono-num {
+  font-family: 'JetBrains Mono', monospace;
+  font-variant-numeric: tabular-nums;
+}
+
+/* Solid translucent dark cockpit panels — no backdrop-filter over WebGL */
+.cyber-panel {
+  background: rgba(8, 12, 26, 0.88);
+  border: 1px solid rgba(56, 189, 248, 0.22);
+  box-shadow: 0 18px 42px rgba(2, 6, 23, 0.72);
+}
+
+.cyber-panel-subtle {
+  background: rgba(12, 18, 36, 0.82);
+  border: 1px solid rgba(255, 255, 255, 0.1);
+}
+
+/* 3D Arcade Tactile Buttons */
+.btn-3d {
+  transition: transform 0.12s cubic-bezier(0.16, 1, 0.3, 1), filter 0.12s ease, opacity 0.12s ease;
+  box-shadow: inset 0 1px 0 rgba(255, 255, 255, 0.24), 0 4px 0 rgba(0, 0, 0, 0.45);
+}
+
+.btn-3d:hover:not(:disabled) {
+  filter: brightness(1.08);
+}
+
+.btn-3d:active:not(:disabled) {
+  transform: translateY(2px);
+  box-shadow: inset 0 1px 0 rgba(255, 255, 255, 0.16), 0 2px 0 rgba(0, 0, 0, 0.45);
+}
+
+.btn-3d-cyan {
+  background: linear-gradient(180deg, #06b6d4 0%, #0284c7 100%);
+  color: #ffffff;
+  border: 1px solid rgba(103, 232, 249, 0.55);
+}
+
+.btn-3d-emerald {
+  background: linear-gradient(180deg, #10b981 0%, #059669 100%);
+  color: #ffffff;
+  border: 1px solid rgba(110, 231, 183, 0.55);
+}
+
+.btn-3d-amber {
+  background: linear-gradient(180deg, #f59e0b 0%, #d97706 100%);
+  color: #090d16;
+  border: 1px solid rgba(253, 224, 71, 0.65);
+}
+
+.btn-3d-purple {
+  background: linear-gradient(180deg, #a855f7 0%, #7e22ce 100%);
+  color: #ffffff;
+  border: 1px solid rgba(216, 180, 254, 0.5);
+}
+
+.btn-3d-slate {
+  background: linear-gradient(180deg, #1e293b 0%, #0f172a 100%);
+  color: #cbd5e1;
+  border: 1px solid rgba(148, 163, 184, 0.28);
+}
+
+@keyframes calloutPop {
+  0% {
+    opacity: 0;
+    transform: translateY(10px) scale(0.88);
+  }
+  18% {
+    opacity: 1;
+    transform: translateY(0) scale(1.03);
+  }
+  82% {
+    opacity: 1;
+    transform: translateY(-4px) scale(1);
+  }
+  100% {
+    opacity: 0;
+    transform: translateY(-14px) scale(0.96);
+  }
+}
+
+.callout-pop {
+  animation: calloutPop 1.25s cubic-bezier(0.16, 1, 0.3, 1) forwards;
+}
+
+@keyframes countdownPop {
+  0% {
+    opacity: 0;
+    transform: scale(1.55);
+  }
+  22% {
+    opacity: 1;
+    transform: scale(0.96);
+  }
+  40% {
+    opacity: 1;
+    transform: scale(1);
+  }
+  100% {
+    opacity: 0.92;
+    transform: scale(0.92);
+  }
+}
+
+.countdown-pop {
+  animation: countdownPop 0.92s cubic-bezier(0.16, 1, 0.3, 1) forwards;
+}
+
+/* Custom thin dark scrollbar for garage car list */
+.garage-scroll::-webkit-scrollbar {
+  width: 6px;
+}
+.garage-scroll::-webkit-scrollbar-track {
+  background: rgba(15, 23, 42, 0.6);
+  border-radius: 999px;
+}
+.garage-scroll::-webkit-scrollbar-thumb {
+  background: rgba(56, 189, 248, 0.4);
+  border-radius: 999px;
+}

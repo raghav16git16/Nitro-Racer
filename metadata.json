@@ -1,0 +1,8 @@
+{
+  "name": "Nitro Rush 3D",
+  "description": "High-speed 3D arcade highway racer with 100 campaign stages, endless curving highway, custom 3D livery shop, and live multiplayer rooms.",
+  "requestFramePermissions": [],
+  "majorCapabilities": [
+    "MAJOR_CAPABILITY_SERVER_SIDE_GEMINI_API"
+  ]
+}
